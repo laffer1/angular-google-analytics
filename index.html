@@ -1,46 +1,128 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=620, user-scalable=no">
-    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
-    <style>
-    html, body { 
-      height:100%; 
-      padding:0;
-      margin:0;
-    }
-    body {
-      margin: 0;
-      background: #333;
-      color:white;
-      padding: 10px;
-    }
-    * {
-      font-family: 'Droid Sans', sans-serif;
-    }
-    h1 {
-      margin-top: 5px;
-    }
-    h3 {
-      margin: 20px 0 10px 0;
-    }
-   
-    div.gist {
-        width:700px;
-    }
-    </style>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="umc-angular-google-analytics : Google Analytics tracking for your AngularJS apps">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>umc-angular-google-analytics</title>
   </head>
-  <body ng-app="myApp" ng-controller='demoController'>
-    <a href="https://github.com/revolunet/angular-google-analytics"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
-    <h1>AngularJS google analytics</h1>
-    <div class='intro'>A simple service to use google analytics tracker in your AngularJS apps.</div>
 
-    <br><br>
-        Here's an example usage :
-    <br><br>
+  <body>
 
-    <script src="https://gist.github.com/revolunet/5514543.js"></script>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/laffer1/angular-google-analytics">View on GitHub</a>
+
+          <h1 id="project_title">umc-angular-google-analytics</h1>
+          <h2 id="project_tagline">Google Analytics tracking for your AngularJS apps</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/laffer1/angular-google-analytics/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/laffer1/angular-google-analytics/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><a href="https://travis-ci.org/laffer1/angular-google-analytics"><img src="https://secure.travis-ci.org/laffer1/angular-google-analytics.png?branch=master" alt="Build Status"></a></p>
+
+<h1>
+<a id="umc-angular-google-analytics" class="anchor" href="#umc-angular-google-analytics" aria-hidden="true"><span class="octicon octicon-link"></span></a>umc-angular-google-analytics</h1>
+
+<p>A simple service that let you integrate google analytics tracker in your AngularJS applications.</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>features</h2>
+
+<ul>
+<li>configurable</li>
+<li>automatic page tracking</li>
+<li>events tracking</li>
+<li>e-commerce tracking</li>
+<li>multiple-domains</li>
+<li>ga.js and analytics.js support</li>
+</ul>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>example</h2>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> app <span class="pl-k">=</span> angular.module(<span class="pl-s"><span class="pl-pds">'</span>app<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>umc-angular-google-analytics<span class="pl-pds">'</span></span>])
+    .config(<span class="pl-k">function</span>(<span class="pl-smi">AnalyticsProvider</span>, <span class="pl-smi">function</span>() {
+        <span class="pl-c">// initial configuration</span>
+        AnalyticsProvider.setAccount(<span class="pl-s"><span class="pl-pds">'</span>UA-XXXXX-xx<span class="pl-pds">'</span></span>);
+
+        <span class="pl-c">// track all routes (or not)</span>
+        AnalyticsProvider.trackPages(<span class="pl-c1">true</span>);
+
+        <span class="pl-c">//Optional set domain (Use 'none' for testing on localhost)</span>
+        <span class="pl-c">//AnalyticsProvider.setDomainName('XXX');</span>
+
+        <span class="pl-c">// url prefix (default is empty)</span>
+        <span class="pl-c">// - for example: when an app doesn't run in the root directory</span>
+        AnalyticsProvider.trackPrefix(<span class="pl-s"><span class="pl-pds">'</span>my-application<span class="pl-pds">'</span></span>);
+
+        <span class="pl-c">// change filename to analytics.js</span>
+        AnalyticsProvider.setFilename(<span class="pl-s"><span class="pl-pds">'</span>analytics.js<span class="pl-pds">'</span></span>);
+
+        <span class="pl-c">// Turn on display features tracking. Use before track page call</span>
+        AnalyticsProvider.trackDisplayFeatures(<span class="pl-c1">true</span>);
+    }))
+    .controller(<span class="pl-s"><span class="pl-pds">'</span>SampleController<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">Analytics</span>) {
+        <span class="pl-c">// create a new pageview event</span>
+        Analytics.trackPage(<span class="pl-s"><span class="pl-pds">'</span>/video/detail/XXX<span class="pl-pds">'</span></span>);
+
+        <span class="pl-c">// create a new tracking event</span>
+        Analytics.trackEvent(<span class="pl-s"><span class="pl-pds">'</span>video<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>play<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>django.mp4<span class="pl-pds">'</span></span>);
+
+        <span class="pl-c">// tracking e-commerce</span>
+        <span class="pl-c">// - create transaction</span>
+        Analytics.addTrans(<span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>2.42<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>0.42<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>0<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Amsterdam<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Netherlands<span class="pl-pds">'</span></span>);
+
+        <span class="pl-c">// - add items to transaction</span>
+        Analytics.addItem(<span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>sku-1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Test product 1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Testing<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>);
+        Analytics.addItem(<span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>sku-2<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Test product 2<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Testing<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>1<span class="pl-pds">'</span></span>);
+
+        <span class="pl-c">// - complete transaction</span>
+        Analytics.trackTrans();
+    });</pre></div>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>configuration</h2>
+
+<div class="highlight highlight-js"><pre><span class="pl-c">// setup your account</span>
+AnalyticsProvider.setAccount(<span class="pl-s"><span class="pl-pds">'</span>UA-XXXXX-xx<span class="pl-pds">'</span></span>);
+<span class="pl-c">// automatic route tracking (default=true)</span>
+AnalyticsProvider.trackPages(<span class="pl-c1">false</span>);
+<span class="pl-c">//Optional set domain (Use 'none' for testing on localhost)</span>
+AnalyticsProvider.setDomainName(<span class="pl-s"><span class="pl-pds">'</span>XXX<span class="pl-pds">'</span></span>);
+<span class="pl-c">//Change default file from analytics.js (universal)</span>
+AnalyticsProvider.setFilename(<span class="pl-s"><span class="pl-pds">'</span>ga.js<span class="pl-pds">'</span></span>);
+<span class="pl-c">// Turn on display features tracking. Use before track page call</span>
+AnalyticsProvider.trackDisplayFeatures(<span class="pl-c1">true</span>);</pre></div>
+
+<h2>
+<a id="licence" class="anchor" href="#licence" aria-hidden="true"><span class="octicon octicon-link"></span></a>Licence</h2>
+
+<p>As AngularJS itself, this module is released under the permissive <a href="http://revolunet.mit-license.org">MIT license</a>. Your contributions are always welcome.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">umc-angular-google-analytics maintained by <a href="https://github.com/laffer1">laffer1</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
 
   </body>
 </html>
