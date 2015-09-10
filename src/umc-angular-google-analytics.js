@@ -221,14 +221,26 @@ angular.module('umc-angular-google-analytics', [])
             * @private
             */
           this._trackEvent = function(category, action, label, value) {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return; 
+              }
 
+			  // primary
               $window.__gaTracker('send','event', {
                   'eventCategory': category,
                   'eventAction': action,
                   'eventLabel': label,
                   'eventValue': value
               });
+			  // secondary trackers
+			  for (var x = 1; x < this.trackers.length; x++) {
+				  $window.__gaTracker(this.trackers[x].name + '.send','event', {
+                      'eventCategory': category,
+                      'eventAction': action,
+                      'eventLabel': label,
+                      'eventValue': value
+                  });
+			  }
               this._log('event', arguments);
           };
 
