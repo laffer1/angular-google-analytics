@@ -1,3 +1,8 @@
+<a name="0.1.9"></a>
+### 0.1.9 <2015-09-10>
+
+Track events on additional trackers.
+
 <a name="0.1.8"></a>
 ### 0.1.8 <2015-04-16>
 
