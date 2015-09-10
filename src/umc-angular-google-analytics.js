@@ -224,7 +224,11 @@ angular.module('umc-angular-google-analytics', [])
               if (angular.isUndefined($window.__gaTracker)) {
                   return; 
               }
-
+			  
+			  // if value is not numeric, just default it to zero
+			  if (!isNaN(parseFloat(value)) && isFinite(value)) {
+				   value = 0;
+			  }
 			  // primary
               $window.__gaTracker('send','event', {
                   'eventCategory': category,
