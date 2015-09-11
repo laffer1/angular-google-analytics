@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.1.8 - 2015-04-16
+ * @version v0.1.9 - 2015-09-10
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -228,14 +228,30 @@ angular.module('umc-angular-google-analytics', [])
             * @private
             */
           this._trackEvent = function(category, action, label, value) {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
-
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return; 
+              }
+			  
+			  // if value is not numeric, just default it to zero
+			  if (!isNaN(parseFloat(value)) && isFinite(value)) {
+				   value = 0;
+			  }
+			  // primary
               $window.__gaTracker('send','event', {
                   'eventCategory': category,
                   'eventAction': action,
                   'eventLabel': label,
                   'eventValue': value
               });
+			  // secondary trackers
+			  for (var x = 1; x < this.trackers.length; x++) {
+				  $window.__gaTracker(this.trackers[x].name + '.send','event', {
+                      'eventCategory': category,
+                      'eventAction': action,
+                      'eventLabel': label,
+                      'eventValue': value
+                  });
+			  }
               this._log('event', arguments);
           };
 
