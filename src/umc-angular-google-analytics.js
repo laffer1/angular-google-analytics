@@ -225,25 +225,32 @@ angular.module('umc-angular-google-analytics', [])
                   return; 
               }
 			  
-			  // if value is not numeric, just default it to zero
-			  if (!isNaN(parseFloat(value)) && isFinite(value)) {
-				   value = 0;
+			  // these two are required by Google's API
+			  var evt = {
+			     'eventCategory': category,
+                 'eventAction': action,
+			  };
+			  
+			  // label is optional and a string
+			  if (typeof label !== 'undefined') {
+			      evt.eventLabel = label;
 			  }
+			  
+			  // value is optional and numeric
+			  if (typeof value !== 'undefined') {
+			     // if value is not numeric, just default it to zero
+			     if (!isNaN(parseFloat(value)) && isFinite(value)) {
+				     value = 0;
+			      }
+			      evt.eventValue = value;
+			  } 
+			  
 			  // primary
-              $window.__gaTracker('send','event', {
-                  'eventCategory': category,
-                  'eventAction': action,
-                  'eventLabel': label,
-                  'eventValue': value
-              });
+              $window.__gaTracker('send','event', evt);
+              
 			  // secondary trackers
 			  for (var x = 1; x < this.trackers.length; x++) {
-				  $window.__gaTracker(this.trackers[x].name + '.send','event', {
-                      'eventCategory': category,
-                      'eventAction': action,
-                      'eventLabel': label,
-                      'eventValue': value
-                  });
+				  $window.__gaTracker(this.trackers[x].name + '.send','event', evt);
 			  }
               this._log('event', arguments);
           };
