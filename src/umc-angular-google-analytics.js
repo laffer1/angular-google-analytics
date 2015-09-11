@@ -349,13 +349,24 @@ angular.module('umc-angular-google-analytics', [])
 
 
           this._trackSocial = function(network, action, target) {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+              if (angular.isUndefined($window.__gaTracker)) {
+                 return;
+              }
 
-              $window.__gaTracker('send','social', {
+              var social = {
                  'socialNetwork': network,
                  'socialAction': action,
                  'socialTarget': target
-              });
+              };
+              
+              // primary
+              $window.__gaTracker('send','social', social);
+              
+              // secondary trackers
+              for (var x = 1; x < this.trackers.length; x++) {
+                  $window.__gaTracker(this.trackers[x].name + '.send','social', social);
+              }
+              
               this._log('trackSocial', arguments);
           };
 
