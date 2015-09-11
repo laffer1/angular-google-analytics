@@ -1,3 +1,12 @@
+<a name="0.1.10"></a>
+### 0.1.10 (2015-09-10)
+
+Add support for multiple trackers on
+social. 
+
+Only pass values for event tracking that are
+defined so that google does not drop them.
+
 <a name="0.1.9"></a>
 ### 0.1.9 <2015-09-10>
 
