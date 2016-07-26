@@ -1,7 +1,7 @@
 {
   "name": "umc-angular-google-analytics",
   "description": "UMC Angular Google Analytics - Easy tracking for your AngularJS application",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "homepage": "http://github.com/laffer1/angular-google-analytics",
   "author": [
   	"Julien Bouquillon <julien@revolunet.com>",
@@ -24,7 +24,7 @@
   "dependencies": {},
   "devDependencies": {
     "karma": "~ 0.8.0",
-    "grunt": ">= 0.4.0",
+    "grunt": ">= 0.4.5",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",
     "grunt-contrib-uglify": "*",

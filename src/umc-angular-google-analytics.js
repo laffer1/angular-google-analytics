@@ -127,12 +127,22 @@ angular.module('umc-angular-google-analytics', [])
             if (trackEcommerce && !ecommerceLoaded) {
                 $window.__gaTracker('require', 'ecommerce', 'ecommerce.js');
                 ecommerceLoaded = true;
+
+                for (var e = 1; i < this.trackers.length; e++) {
+                    $window.__gaTracker(this.trackers[e].name + '.require', 'ecommerce', 'ecommerce.js');
+                }
+
                 this._log('loadGA', 'ecommerce');
             }
             
             if (trackEnhancedEcommerce && !enhancedEcommerceLoaded) {
                 $window.__gaTracker('require', 'ec', 'ec.js');
                 enhancedEcommerceLoaded = true;
+
+                for (var ee = 1; i < this.trackers.length; ee++) {
+                    $window.__gaTracker(this.trackers[ee].name + '.require', 'ec', 'ec.js');
+                }
+
                 this._log('loadGA', 'ec');
             }
             
@@ -141,7 +151,7 @@ angular.module('umc-angular-google-analytics', [])
                 displayfeaturesLoaded = true;
                 
                 for (var x = 1; i < this.trackers.length; x++) {
-                    $window.__gaTracker(this.trackers[x].name + '.require', 'ecommerce', 'ecommerce.js');
+                    $window.__gaTracker(this.trackers[x].name + '.require', 'displayfeatures', 'displayfeatures.js');
                 }
                 
                 this._log('loadGA', 'displayfeatures');
