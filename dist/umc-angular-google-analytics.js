@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.1.10 - 2015-09-10
+ * @version v0.1.11 - 2016-07-26
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -134,12 +134,22 @@ angular.module('umc-angular-google-analytics', [])
             if (trackEcommerce && !ecommerceLoaded) {
                 $window.__gaTracker('require', 'ecommerce', 'ecommerce.js');
                 ecommerceLoaded = true;
+
+                for (var e = 1; i < this.trackers.length; e++) {
+                    $window.__gaTracker(this.trackers[e].name + '.require', 'ecommerce', 'ecommerce.js');
+                }
+
                 this._log('loadGA', 'ecommerce');
             }
             
             if (trackEnhancedEcommerce && !enhancedEcommerceLoaded) {
                 $window.__gaTracker('require', 'ec', 'ec.js');
                 enhancedEcommerceLoaded = true;
+
+                for (var ee = 1; i < this.trackers.length; ee++) {
+                    $window.__gaTracker(this.trackers[ee].name + '.require', 'ec', 'ec.js');
+                }
+
                 this._log('loadGA', 'ec');
             }
             
@@ -148,7 +158,7 @@ angular.module('umc-angular-google-analytics', [])
                 displayfeaturesLoaded = true;
                 
                 for (var x = 1; i < this.trackers.length; x++) {
-                    $window.__gaTracker(this.trackers[x].name + '.require', 'ecommerce', 'ecommerce.js');
+                    $window.__gaTracker(this.trackers[x].name + '.require', 'displayfeatures', 'displayfeatures.js');
                 }
                 
                 this._log('loadGA', 'displayfeatures');
