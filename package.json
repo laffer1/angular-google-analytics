@@ -23,13 +23,13 @@
   ],  
   "dependencies": {},
   "devDependencies": {
-    "karma": "~ 0.8.0",
-    "grunt": ">= 0.4.5",
+    "karma": "~ 0.8.8",
+    "grunt": ">= 1.0.1",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",
     "grunt-contrib-uglify": "*",
-    "grunt-release": "~0.3.3",
-    "grunt-conventional-changelog": "0.0.12"
+    "grunt-release": "~0.13.1",
+    "grunt-conventional-changelog": "6.1.0"
   },
   "scripts": {
     "test": "grunt travis",
