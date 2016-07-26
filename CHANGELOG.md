@@ -1,3 +1,13 @@
+<a name="0.1.12"></a>
+### 0.1.12 (2016-07-26)
+
+Fix dist build
+
+<a name="0.1.11"></a>
+### 0.1.11 (2016-07-26)
+
+Support multiple enhanced ecommerce instances
+
 <a name="0.1.10"></a>
 ### 0.1.10 (2015-09-10)
 
