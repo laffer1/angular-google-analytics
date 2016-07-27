@@ -1,3 +1,12 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/laffer1/angular-google-analytics/compare/0.1.12...v0.2.0) (2016-07-27)
+
+Implement enhanced ecommerce wrapper methods. 
+
+Solve issues with secondary trackers not handling ecommerce, display or enhanced properly.
+
+Allow individual trackers settings to get applied correctly.
+
 <a name="0.1.12"></a>
 ### 0.1.12 (2016-07-26)
 
