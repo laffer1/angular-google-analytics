@@ -34,8 +34,12 @@ var app = angular.module('app', ['umc-angular-google-analytics'])
         // change filename to analytics.js
         AnalyticsProvider.setFilename('analytics.js');
 		
-		// Turn on display features tracking. Use before track page call
+		// Turn on display features tracking. Use before track page call  (for primary tracker)
 		AnalyticsProvider.trackDisplayFeatures(true);
+
+		// ecommerce and enhanced ecommerce. Don't use both.. one or the other
+		AnalyticsProvider.trackEcommerce(true);
+		AnalyticsProvider.trackEnhancedEcommerce(true);
     }))
     .controller('SampleController', function(Analytics) {
         // create a new pageview event
@@ -70,6 +74,14 @@ AnalyticsProvider.setDomainName('XXX');
 AnalyticsProvider.setFilename('ga.js');
 // Turn on display features tracking. Use before track page call
 AnalyticsProvider.trackDisplayFeatures(true);
+
+// add additional trackers
+AnalyticsProvider.addTracker('UA-XXXXX-xx', 'name');
+// Configure display features on secondary item
+AnalyticsProvider.trackDisplayFeatures(true, 'name');
+// configure ecommerce on secondary
+AnalyticsProvider.trackEcommerce(true, 'name');
+
 ```
 
 ## Licence

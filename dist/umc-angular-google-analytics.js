@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.1.12 - 2016-07-27
+ * @version v0.2.0 - 2016-07-27
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -17,23 +17,28 @@ angular.module('umc-angular-google-analytics', [])
         var domainName;
         var filename = 'analytics.js';
         var pageEvent = '$routeChangeSuccess';
-        var trackEcommerce = false;
-        var ecommerceLoaded = false;
-        var trackDisplayfeatures = false;
-        var displayfeaturesLoaded = false;
-        var trackEnhancedEcommerce = false;
-        var enhancedEcommerceLoaded = false;
         
         this.trackers = [];
         this._logs = [];
 
         // config methods
         this.setAccount = function(id) {
+            var primary = {
+                code: id,
+                name: '',
+                trackEcommerce: false,
+                ecommerceLoaded: false,
+                trackDisplayfeatures: false,
+                displayfeaturesLoaded: false,
+                trackEnhancedEcommerce: false,
+                enhancedEcommerceLoaded: false
+            };
+
             // first tracker in array is always the "account" value
             if (this.trackers.length === 0) {
-                this.trackers.push({ code: id, name: ''});
+                this.trackers.push(primary);
             } else {
-                this.trackers[0] = { code: id, name: ''};
+                this.trackers[0] = primary;
             }
             return true;
         };
@@ -63,18 +68,50 @@ angular.module('umc-angular-google-analytics', [])
             return true;
         };
 
-        this.trackEcommerce = function(doTrack) {
-            trackEcommerce = doTrack;
+        this.trackEcommerce = function (doTrack, name) {
+            if (name === null || name === '') {
+                this.trackers[0].trackEcommerce = doTrack;
+                return true;
+            }
+
+            for (var i = 1; i < this.trackers.length; i++) {
+                if (this.trackers[i].name === name) {
+                    this.trackers[i].trackEcommerce = doTrack;
+                    return true;
+                }
+            }
+
             return true;
         };
-        
-        this.trackEnhancedEcommerce = function(doTrack) {
-            trackEnhancedEcommerce = doTrack;
+
+        this.trackEnhancedEcommerce = function (doTrack, name) {
+            if (name === null || name === '') {
+                this.trackers[0].trackEnhancedEcommerce = doTrack;
+                return true;
+            }
+
+            for (var i = 1; i < this.trackers.length; i++) {
+                if (this.trackers[i].name === name) {
+                    this.trackers[i].trackEnhancedEcommerce = doTrack;
+                    return true;
+                }
+            }
+
             return true;
         };
-        
-        this.trackDisplayFeatures = function(doTrack) {
-            trackDisplayfeatures = doTrack;
+
+        this.trackDisplayFeatures = function (doTrack, name) {
+            if (name === null || name === '') {
+                this.trackers[0].trackDisplayfeatures = doTrack;
+                return true;
+            }
+
+            for (var i = 1; i < this.trackers.length; i++) {
+                if (this.trackers[i].name === name) {
+                    this.trackers[i].trackDisplayfeatures = doTrack;
+                    return true;
+                }
+            }
             return true;
         };
         
@@ -90,9 +127,18 @@ angular.module('umc-angular-google-analytics', [])
                     this.trackers[i].code = code;
                     return;
                 }
-            } 
-            
-            this.trackers.push({ code: code, name: name });
+            }
+
+            this.trackers.push({
+                code: code,
+                name: name,
+                trackEcommerce: false,
+                ecommerceLoaded: false,
+                trackDisplayfeatures: false,
+                displayfeaturesLoaded: false,
+                trackEnhancedEcommerce: false,
+                enhancedEcommerceLoaded: false
+            });
         };
         
         this.getTrackers = function() {
@@ -123,46 +169,57 @@ angular.module('umc-angular-google-analytics', [])
                 opts.cookieDomain = domainName;
             }
 
-            // create the primary tracker
-            $window.__gaTracker('create', this.trackers[0].code);
-            
-            // create secondary trackers if present
-            for (var i = 1; i < this.trackers.length; i++) {
-                $window.__gaTracker('create', this.trackers[i].code, {'name': this.trackers[i].name });
-            }
+              // create the primary tracker
+              $window.__gaTracker('create', this.trackers[0].code);
 
-            if (trackEcommerce && !ecommerceLoaded) {
-                $window.__gaTracker('require', 'ecommerce', 'ecommerce.js');
-                ecommerceLoaded = true;
+              // create secondary trackers if present
+              for (var i = 1; i < this.trackers.length; i++) {
+                  $window.__gaTracker('create', this.trackers[i].code, {'name': this.trackers[i].name});
+              }
 
-                for (var e = 1; i < this.trackers.length; e++) {
-                    $window.__gaTracker(this.trackers[e].name + '.require', 'ecommerce', 'ecommerce.js');
-                }
+              // load ecommerce for each tracker if requested
+              // Only enable ecommerce if enhanced ecommerce is disabled per Google documentation.
+              if (this.trackers[0].trackEcommerce && !this.trackers[0].ecommerceLoaded && !this.trackers[0].trackEnhancedEcommerce) {
+                  this.trackers[0].ecommerceLoaded = true;
+                  $window.__gaTracker('require', 'ecommerce', 'ecommerce.js');
+                  this._log('loadGA', 'ecommerce');
+              }
+              for (var e = 1; i < this.trackers.length; e++) {
+                  if (this.trackers[e].ecommerceLoaded )
+                      continue;
+                  this.trackers[e].ecommerceLoaded = true;
+                  $window.__gaTracker(this.trackers[e].name + '.require', 'ecommerce', 'ecommerce.js');
+                  this._log('loadGA', 'ecommerce ' + this.trackers[e].name);
+              }
 
-                this._log('loadGA', 'ecommerce');
-            }
-            
-            if (trackEnhancedEcommerce && !enhancedEcommerceLoaded) {
-                $window.__gaTracker('require', 'ec', 'ec.js');
-                enhancedEcommerceLoaded = true;
+              // load enhanced ecommerce for each tracker if requested
+              // Only enable ecommerce if enhanced ecommerce is disabled per Google documentation.
+              if (this.trackers[0].trackEnhancedEcommerce && !this.trackers[0].enhancedEcommerceLoaded) {
+                  this.trackers[0].enhancedEcommerceLoaded = true;
+                  $window.__gaTracker('require', 'ec', 'ec.js');
+                  this._log('loadGA', 'ec');
+              }
+              for (var ee = 1; i < this.trackers.length; ee++) {
+                  if (this.trackers[e].enhancedEcommerceLoaded)
+                      continue;
+                  this.trackers[ee].enhancedEcommerceLoaded = true;
+                  $window.__gaTracker(this.trackers[ee].name + '.require', 'ec', 'ec.js');
+                  this._log('loadGA', 'ec ' + this.trackers[ee].name);
+              }
 
-                for (var ee = 1; i < this.trackers.length; ee++) {
-                    $window.__gaTracker(this.trackers[ee].name + '.require', 'ec', 'ec.js');
-                }
-
-                this._log('loadGA', 'ec');
-            }
-            
-            if (trackDisplayfeatures && !displayfeaturesLoaded) {
-                $window.__gaTracker('require', 'displayfeatures', 'displayfeatures.js');
-                displayfeaturesLoaded = true;
-                
-                for (var x = 1; i < this.trackers.length; x++) {
-                    $window.__gaTracker(this.trackers[x].name + '.require', 'displayfeatures', 'displayfeatures.js');
-                }
-                
-                this._log('loadGA', 'displayfeatures');
-            }
+              // load display features
+              if (this.trackers[0].trackDisplayfeatures && !this.trackers[0].displayfeaturesLoaded) {
+                  this.trackers[0].displayfeaturesLoaded = true;
+                  $window.__gaTracker('require', 'displayfeatures', 'displayfeatures.js');
+                  this._log('loadGA', 'displayfeatures');
+              }
+              for (var d = 1; i < this.trackers.length; d++) {
+                  if (this.trackers[e].displayfeaturesLoaded)
+                      continue;
+                  this.trackers[d].displayfeaturesLoaded = true;
+                  $window.__gaTracker(this.trackers[d].name + '.require', 'displayfeatures', 'displayfeatures.js');
+                  this._log('loadGA', 'displayfeatures ' + this.trackers[d].name);
+              }
 
             if (trackRoutes) {
               this._trackPage($location.path(), $rootScope.pageTitle); // TODO: this is too specific to our apps
@@ -195,17 +252,8 @@ angular.module('umc-angular-google-analytics', [])
               if (angular.isUndefined($window.__gaTracker)) {
                   return; 
               }
-              
-              if (trackDisplayfeatures && !displayfeaturesLoaded) {
-                  $window.__gaTracker('require', 'displayfeatures', 'displayfeatures.js');
-                  displayfeaturesLoaded = true;
-                
-                  for (var i = 1; i < this.trackers.length; i++) {
-                      $window.__gaTracker(this.trackers[i].name + '.require', 'ecommerce', 'ecommerce.js');
-                  }
-                
-                  this._log('loadGA', 'displayfeatures');
-              }
+
+              // TODO: we had the require calls here for displayfeatures. do we actually need it here?
 
               if (angular.isUndefined(url)) {
                  url = $location.path(); 
@@ -254,7 +302,7 @@ angular.module('umc-angular-google-analytics', [])
               // these two are required by Google's API
               var evt = {
                  'eventCategory': category,
-                 'eventAction': action,
+                 'eventAction': action
               };
               
               // label is optional and a string
@@ -295,12 +343,7 @@ angular.module('umc-angular-google-analytics', [])
           this._addTrans = function (transactionId, affiliation, total, tax, shipping) {
             if (angular.isUndefined($window.__gaTracker)) { return; }
 
-            //guard in case ecommerce hasn't been loaded, shouldn't really happen
-            if (trackEcommerce && !ecommerceLoaded) {
-                $window.__gaTracker('require', 'ecommerce', 'ecommerce.js');
-                ecommerceLoaded = true;
-                this._log('loadGA', 'ecommerce');
-            }
+            //TODO: guard in case ecommerce hasn't been loaded, shouldn't really happen
 
             $window.__gaTracker('ecommerce:addTransaction', {
                 'id': transactionId,
