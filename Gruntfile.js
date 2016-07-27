@@ -79,7 +79,8 @@ module.exports = function(grunt) {
           exports: true,
           angular: false,
           $: false
-        }
+        },
+	reporterOutput: ""
       }
     },
     // watch: {
