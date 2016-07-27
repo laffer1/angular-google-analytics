@@ -322,8 +322,112 @@ angular.module('umc-angular-google-analytics', [])
               this._log('event', arguments);
           };
 
+            /**
+             * Add enhanced ecommerce impression
+             * @param id  product id  (string)        required
+             * @param name  product name (string)     required
+             * @param category product category (string)
+             * @param brand  product brand (string)
+             * @param variant product variant (string)
+             * @param list  product list (string)
+             * @param position  product position (number)
+             * @param dimension1 custom dimension (string)
+             * @private
+             */
+            this._addImpression = function (id, name, category, brand, variant, list, position, dimension1) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                var impression = {
+                    'id': id,
+                    'name': name,
+                    'category': category,
+                    'brand': brand,
+                    'variant': variant,
+                    'list': list,
+                    'position': position,
+                    'dimension1': dimension1
+                };
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:addImpression', impression);
+                    this._log('ec:addImpression', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:addImpression', impression);
+                        this._log('ec:addImpression', arguments);
+                    }
+                }
+            };
+
+            /**
+             * Add enhanced ecommerce product
+             * @param id  product id  (string)        required
+             * @param name  product name (string)     required
+             * @param category product category (string)
+             * @param brand  product brand (string)
+             * @param variant product variant (string)
+             * @param position  product position (number)
+             * @param dimension1 custom dimension (string)
+             * @private
+             */
+            this._addProduct = function (id, name, category, brand, variant, position, dimension1) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                var product = {
+                    'id': id,
+                    'name': name,
+                    'category': category,
+                    'brand': brand,
+                    'variant': variant,
+                    'position': position,
+                    'dimension1': dimension1
+                };
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:addProduct', product);
+                    this._log('ec:addImpression', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:addProduct', product);
+                        this._log('ec:addProduct', arguments);
+                    }
+                }
+            };
+
+            /**
+             * set enhanced ecommerce action
+             * @param action type of event such as a 'click'
+             * @param data data to send such as a {'list': 'Search Results'}
+             * @private
+             */
+            this._setAction = function (action, data) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:setAction', action, data);
+                    this._log('ec:setAction', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:setAction', action, data);
+                        this._log('ec:setAction', arguments);
+                    }
+                }
+            };
+
           /**
-           * Add transaction
+           * Add ecommerce transaction
            * https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce#addTrans
            * @param transactionId
            * @param affiliation
@@ -503,6 +607,17 @@ angular.module('umc-angular-google-analytics', [])
                     // add an action event
                     me._trackEvent(category, action, label, value);
                 },
+                // enhanced ecommerce
+                addImpression: function(id, name, category, brand, variant, list, position, dimension1) {
+                    me._addImpression(id, name, category, brand, variant, list, position, dimension1)
+                },
+                addProduct: function(id, name, category, brand, variant, position, dimension1) {
+                    me._addProduct(id, name, category, brand, variant, position, dimension1)
+                },
+                setAction: function (action, data) {
+                    me._setAction(action, data);
+                },
+                // ecommerce
                 addTrans: function (transactionId, affiliation, total, tax, shipping) {
                     me._addTrans(transactionId, affiliation, total, tax, shipping);
                 },
