@@ -37,10 +37,16 @@ module.exports = function(grunt) {
         dest: '<%= dirs.dest %>/<%= pkg.name %>.min.js'
       }
     },
-    changelog: {
+    conventionalChangelog: {
       options: {
-        dest: 'CHANGELOG.md',
+	changelogOpts: {
+        // conventional-changelog options go here
+        preset: 'angular'
+        },
         versionFile: 'package.json'
+      },
+      release: {
+	src: 'CHANGELOG.md'
       }
     },
     stage: {
@@ -147,10 +153,10 @@ module.exports = function(grunt) {
   grunt.registerTask('test-server', ['karma:server']);
 
   // Build task.
-  grunt.registerTask('build', ['test', 'concat', 'uglify', 'changelog']);
+  grunt.registerTask('build', ['test', 'concat', 'uglify' ]);
 
   // release task
-  grunt.registerTask('release', ['build', 'changelog']);
+  grunt.registerTask('release', ['build', 'conventionalChangelog']);
 
 
   // Provides the "karma" task.
