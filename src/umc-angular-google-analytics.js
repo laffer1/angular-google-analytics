@@ -330,25 +330,38 @@ angular.module('umc-angular-google-analytics', [])
            * @param total
            * @param tax
            * @param shipping
+           * @param currency (defaults to USD if not set)  ISO 4217 codes for this.
            * @private
-           * temporarily removing city, state, country as I don't see these in the newer documentation
            */
-          this._addTrans = function (transactionId, affiliation, total, tax, shipping) {
-            if (angular.isUndefined($window.__gaTracker)) { return; }
+          this._addTrans = function (transactionId, affiliation, total, tax, shipping, currency) {
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-            //TODO: guard in case ecommerce hasn't been loaded, shouldn't really happen
+              if (currency == null)
+                  currency = 'USD';
 
-            $window.__gaTracker('ecommerce:addTransaction', {
-                'id': transactionId,
-                'affiliation': affiliation,
-                'revenue': total,
-                'shipping': shipping,
-                'tax': tax
-                //'city': city,
-                //'state': state,
-                //'country': country
-            });
-            this._log('ecommerce:addTransaction', arguments);
+              //TODO: guard in case ecommerce hasn't been loaded, shouldn't really happen
+              var tran = {
+                  'id': transactionId,
+                  'affiliation': affiliation,
+                  'revenue': total,
+                  'shipping': shipping,
+                  'tax': tax,
+                  'currency': currency
+              };
+
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:addTransaction', tran);
+                  this._log('ecommerce:addTransaction', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:addTransaction', tran);
+                      this._log('ecommerce:addTransaction', arguments);
+                  }
+              }
           };
 
           /**
@@ -360,20 +373,38 @@ angular.module('umc-angular-google-analytics', [])
            * @param category
            * @param price
            * @param quantity
+           * @param currency (defaults to USD if not set)  ISO 4217 codes for this.
            * @private
            */
-          this._addItem = function (transactionId, name, sku, category, price, quantity) {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+          this._addItem = function (transactionId, name, sku, category, price, quantity, currency) {
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-              $window.__gaTracker('ecommerce:addItem', {
+              if (currency == null)
+                  currency = 'USD';
+
+              var item = {
                   'id': transactionId,
                   'name': name,
                   'sku': sku,
                   'category': category,
                   'price': price,
-                  'quantity': quantity
-              });
-              this._log('ecommerce:addItem', arguments);
+                  'quantity': quantity,
+                  'currency': currency
+              };
+
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:addItem', item);
+                  this._log('ecommerce:addItem', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:addItem', item);
+                      this._log('ecommerce:addItem', arguments);
+                  }
+              }
           };
 
           /**
@@ -382,10 +413,21 @@ angular.module('umc-angular-google-analytics', [])
            * @private
            */
           this._trackTrans = function () {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-              $window.__gaTracker('ecommerce:send');
-              this._log('ecommerce:send', arguments);
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:send');
+                  this._log('ecommerce:send', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:send');
+                      this._log('ecommerce:send', arguments);
+                  }
+              }
           };
 
           /**
@@ -394,10 +436,21 @@ angular.module('umc-angular-google-analytics', [])
            * @private
            */
           this._clearTrans = function () {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-              $window.__gaTracker('ecommerce:clear');
-              this._log('ecommerce:clear', arguments);
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:clear');
+                  this._log('ecommerce:clear', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:clear');
+                      this._log('ecommerce:clear', arguments);
+                  }
+              }
           };
 
 
