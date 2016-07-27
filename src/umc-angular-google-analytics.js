@@ -609,10 +609,10 @@ angular.module('umc-angular-google-analytics', [])
                 },
                 // enhanced ecommerce
                 addImpression: function(id, name, category, brand, variant, list, position, dimension1) {
-                    me._addImpression(id, name, category, brand, variant, list, position, dimension1)
+                    me._addImpression(id, name, category, brand, variant, list, position, dimension1);
                 },
                 addProduct: function(id, name, category, brand, variant, position, dimension1) {
-                    me._addProduct(id, name, category, brand, variant, position, dimension1)
+                    me._addProduct(id, name, category, brand, variant, position, dimension1);
                 },
                 setAction: function (action, data) {
                     me._setAction(action, data);

@@ -8,6 +8,9 @@ describe('umc-angular-google-analytics', function(){
     beforeEach(module(function(AnalyticsProvider) {
       AnalyticsProvider.setAccount('UA-XXXXXX-xx');
       AnalyticsProvider.addTracker('UA-XXXXXX-xx', 'foo');
+
+        AnalyticsProvider.trackEcommerce(true);
+        AnalyticsProvider.trackEcommerce(true, 'foo');
     }));
 
    describe('automatic trackPages', function() {
@@ -104,5 +107,38 @@ describe('umc-angular-google-analytics', function(){
     });
 
   });
+
+    describe('enhanced e-commerce transactions', function () {
+        beforeEach(module(function (AnalyticsProvider) {
+            AnalyticsProvider.trackEcommerce(false);
+            AnalyticsProvider.trackEcommerce(false, 'foo');
+
+            AnalyticsProvider.trackEnhancedEcommerce(true);
+            AnalyticsProvider.trackEnhancedEcommerce(true, 'foo');
+        }));
+        it('should add impression', function () {
+            inject(function (Analytics) {
+                expect(Analytics._logs.length).toBe(1);
+                Analytics.addImpression('1', 'name', 'cat', 'brand', 'varient', 'list', 'position', 'dimension');
+                expect(Analytics._logs.length).toBe(2);
+            });
+        });
+
+        it('should add a product', function () {
+            inject(function (Analytics) {
+                expect(Analytics._logs.length).toBe(1);
+                Analytics.addProduct('1', 'name', 'cat', 'brand', 'varient', 'position', 'dimension');
+                expect(Analytics._logs.length).toBe(2);
+            });
+        });
+
+        it('should set an action', function () {
+            inject(function (Analytics) {
+                expect(Analytics._logs.length).toBe(1);
+                Analytics.setAction('click', 'foo');
+                expect(Analytics._logs.length).toBe(2);
+            });
+        });
+    });
 
 });

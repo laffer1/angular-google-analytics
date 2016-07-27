@@ -329,33 +329,150 @@ angular.module('umc-angular-google-analytics', [])
               this._log('event', arguments);
           };
 
+            /**
+             * Add enhanced ecommerce impression
+             * @param id  product id  (string)        required
+             * @param name  product name (string)     required
+             * @param category product category (string)
+             * @param brand  product brand (string)
+             * @param variant product variant (string)
+             * @param list  product list (string)
+             * @param position  product position (number)
+             * @param dimension1 custom dimension (string)
+             * @private
+             */
+            this._addImpression = function (id, name, category, brand, variant, list, position, dimension1) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                var impression = {
+                    'id': id,
+                    'name': name,
+                    'category': category,
+                    'brand': brand,
+                    'variant': variant,
+                    'list': list,
+                    'position': position,
+                    'dimension1': dimension1
+                };
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:addImpression', impression);
+                    this._log('ec:addImpression', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:addImpression', impression);
+                        this._log('ec:addImpression', arguments);
+                    }
+                }
+            };
+
+            /**
+             * Add enhanced ecommerce product
+             * @param id  product id  (string)        required
+             * @param name  product name (string)     required
+             * @param category product category (string)
+             * @param brand  product brand (string)
+             * @param variant product variant (string)
+             * @param position  product position (number)
+             * @param dimension1 custom dimension (string)
+             * @private
+             */
+            this._addProduct = function (id, name, category, brand, variant, position, dimension1) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                var product = {
+                    'id': id,
+                    'name': name,
+                    'category': category,
+                    'brand': brand,
+                    'variant': variant,
+                    'position': position,
+                    'dimension1': dimension1
+                };
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:addProduct', product);
+                    this._log('ec:addImpression', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:addProduct', product);
+                        this._log('ec:addProduct', arguments);
+                    }
+                }
+            };
+
+            /**
+             * set enhanced ecommerce action
+             * @param action type of event such as a 'click'
+             * @param data data to send such as a {'list': 'Search Results'}
+             * @private
+             */
+            this._setAction = function (action, data) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:setAction', action, data);
+                    this._log('ec:setAction', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:setAction', action, data);
+                        this._log('ec:setAction', arguments);
+                    }
+                }
+            };
+
           /**
-           * Add transaction
+           * Add ecommerce transaction
            * https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce#addTrans
            * @param transactionId
            * @param affiliation
            * @param total
            * @param tax
            * @param shipping
+           * @param currency (defaults to USD if not set)  ISO 4217 codes for this.
            * @private
-           * temporarily removing city, state, country as I don't see these in the newer documentation
            */
-          this._addTrans = function (transactionId, affiliation, total, tax, shipping) {
-            if (angular.isUndefined($window.__gaTracker)) { return; }
+          this._addTrans = function (transactionId, affiliation, total, tax, shipping, currency) {
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-            //TODO: guard in case ecommerce hasn't been loaded, shouldn't really happen
+              if (currency == null)
+                  currency = 'USD';
 
-            $window.__gaTracker('ecommerce:addTransaction', {
-                'id': transactionId,
-                'affiliation': affiliation,
-                'revenue': total,
-                'shipping': shipping,
-                'tax': tax
-                //'city': city,
-                //'state': state,
-                //'country': country
-            });
-            this._log('ecommerce:addTransaction', arguments);
+              //TODO: guard in case ecommerce hasn't been loaded, shouldn't really happen
+              var tran = {
+                  'id': transactionId,
+                  'affiliation': affiliation,
+                  'revenue': total,
+                  'shipping': shipping,
+                  'tax': tax,
+                  'currency': currency
+              };
+
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:addTransaction', tran);
+                  this._log('ecommerce:addTransaction', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:addTransaction', tran);
+                      this._log('ecommerce:addTransaction', arguments);
+                  }
+              }
           };
 
           /**
@@ -367,20 +484,38 @@ angular.module('umc-angular-google-analytics', [])
            * @param category
            * @param price
            * @param quantity
+           * @param currency (defaults to USD if not set)  ISO 4217 codes for this.
            * @private
            */
-          this._addItem = function (transactionId, name, sku, category, price, quantity) {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+          this._addItem = function (transactionId, name, sku, category, price, quantity, currency) {
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-              $window.__gaTracker('ecommerce:addItem', {
+              if (currency == null)
+                  currency = 'USD';
+
+              var item = {
                   'id': transactionId,
                   'name': name,
                   'sku': sku,
                   'category': category,
                   'price': price,
-                  'quantity': quantity
-              });
-              this._log('ecommerce:addItem', arguments);
+                  'quantity': quantity,
+                  'currency': currency
+              };
+
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:addItem', item);
+                  this._log('ecommerce:addItem', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:addItem', item);
+                      this._log('ecommerce:addItem', arguments);
+                  }
+              }
           };
 
           /**
@@ -389,10 +524,21 @@ angular.module('umc-angular-google-analytics', [])
            * @private
            */
           this._trackTrans = function () {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-              $window.__gaTracker('ecommerce:send');
-              this._log('ecommerce:send', arguments);
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:send');
+                  this._log('ecommerce:send', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:send');
+                      this._log('ecommerce:send', arguments);
+                  }
+              }
           };
 
           /**
@@ -401,10 +547,21 @@ angular.module('umc-angular-google-analytics', [])
            * @private
            */
           this._clearTrans = function () {
-              if (angular.isUndefined($window.__gaTracker)) { return; }
+              if (angular.isUndefined($window.__gaTracker)) {
+                  return;
+              }
 
-              $window.__gaTracker('ecommerce:clear');
-              this._log('ecommerce:clear', arguments);
+              if (this.trackers[0].trackEcommerce) {
+                  $window.__gaTracker('ecommerce:clear');
+                  this._log('ecommerce:clear', arguments);
+              }
+
+              for (var x = 1; x < this.trackers.length; x++) {
+                  if (this.trackers[x].trackEcommerce) {
+                      $window.__gaTracker(this.trackers[x].name + '.ecommerce:clear');
+                      this._log('ecommerce:clear', arguments);
+                  }
+              }
           };
 
 
@@ -457,6 +614,17 @@ angular.module('umc-angular-google-analytics', [])
                     // add an action event
                     me._trackEvent(category, action, label, value);
                 },
+                // enhanced ecommerce
+                addImpression: function(id, name, category, brand, variant, list, position, dimension1) {
+                    me._addImpression(id, name, category, brand, variant, list, position, dimension1);
+                },
+                addProduct: function(id, name, category, brand, variant, position, dimension1) {
+                    me._addProduct(id, name, category, brand, variant, position, dimension1);
+                },
+                setAction: function (action, data) {
+                    me._setAction(action, data);
+                },
+                // ecommerce
                 addTrans: function (transactionId, affiliation, total, tax, shipping) {
                     me._addTrans(transactionId, affiliation, total, tax, shipping);
                 },
