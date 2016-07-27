@@ -124,7 +124,8 @@ angular.module('umc-angular-google-analytics', [])
                 $window.__gaTracker('create', this.trackers[i].code, {'name': this.trackers[i].name });
             }
 
-            if (trackEcommerce && !ecommerceLoaded) {
+            // Only enable ecommerce if enhanced ecommerce is disabled per Google documentation.
+            if (trackEcommerce && !ecommerceLoaded && !trackEnhancedEcommerce) {
                 $window.__gaTracker('require', 'ecommerce', 'ecommerce.js');
                 ecommerceLoaded = true;
 
