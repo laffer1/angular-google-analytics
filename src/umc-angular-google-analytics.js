@@ -220,6 +220,10 @@ angular.module('umc-angular-google-analytics', [])
 
             // inject the google analytics tag
             (function() {
+                if (angular.isUndefined($document[0]))
+                    return;
+
+
               var gaTag = $document[0].createElement('script');
               gaTag.type = 'text/javascript';
               gaTag.async = true;
