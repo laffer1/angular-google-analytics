@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.2.0 - 2016-07-27
+ * @version v0.2.1 - 2016-07-28
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -227,6 +227,9 @@ angular.module('umc-angular-google-analytics', [])
 
             // inject the google analytics tag
             (function() {
+                if (angular.isUndefined($document[0]))
+                    return;
+
               var gaTag = $document[0].createElement('script');
               gaTag.type = 'text/javascript';
               gaTag.async = true;

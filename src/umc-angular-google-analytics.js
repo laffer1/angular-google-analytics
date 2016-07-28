@@ -223,7 +223,6 @@ angular.module('umc-angular-google-analytics', [])
                 if (angular.isUndefined($document[0]))
                     return;
 
-
               var gaTag = $document[0].createElement('script');
               gaTag.type = 'text/javascript';
               gaTag.async = true;
