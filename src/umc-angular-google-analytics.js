@@ -64,48 +64,48 @@ angular.module('umc-angular-google-analytics', [])
         this.trackEcommerce = function (doTrack, name) {
             if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackEcommerce = doTrack;
-                return true;
+                return doTrack;
             }
 
             for (var i = 1; i < this.trackers.length; i++) {
                 if (this.trackers[i].name === name) {
                     this.trackers[i].trackEcommerce = doTrack;
-                    return true;
+                    return doTrack;
                 }
             }
 
-            return true;
+            return false;
         };
 
         this.trackEnhancedEcommerce = function (doTrack, name) {
             if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackEnhancedEcommerce = doTrack;
-                return true;
+                return doTrack;
             }
 
             for (var i = 1; i < this.trackers.length; i++) {
                 if (this.trackers[i].name === name) {
                     this.trackers[i].trackEnhancedEcommerce = doTrack;
-                    return true;
+                    return doTrack;
                 }
             }
 
-            return true;
+            return false;
         };
 
         this.trackDisplayFeatures = function (doTrack, name) {
             if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackDisplayfeatures = doTrack;
-                return true;
+                return doTrack;
             }
 
             for (var i = 1; i < this.trackers.length; i++) {
                 if (this.trackers[i].name === name) {
                     this.trackers[i].trackDisplayfeatures = doTrack;
-                    return true;
+                    return doTrack;
                 }
             }
-            return true;
+            return false;
         };
 
         this.addTracker = function (code, name) {
