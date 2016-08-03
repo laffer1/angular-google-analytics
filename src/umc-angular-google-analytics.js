@@ -62,7 +62,7 @@ angular.module('umc-angular-google-analytics', [])
         };
 
         this.trackEcommerce = function (doTrack, name) {
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackEcommerce = doTrack;
                 return true;
             }
@@ -78,7 +78,7 @@ angular.module('umc-angular-google-analytics', [])
         };
 
         this.trackEnhancedEcommerce = function (doTrack, name) {
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackEnhancedEcommerce = doTrack;
                 return true;
             }
@@ -94,7 +94,7 @@ angular.module('umc-angular-google-analytics', [])
         };
 
         this.trackDisplayFeatures = function (doTrack, name) {
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackDisplayfeatures = doTrack;
                 return true;
             }
@@ -110,7 +110,7 @@ angular.module('umc-angular-google-analytics', [])
 
         this.addTracker = function (code, name) {
             // handle special case of primary tracker
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].code = code;
                 return;
             }
@@ -192,6 +192,7 @@ angular.module('umc-angular-google-analytics', [])
                 })();
                 created = true;
             };
+
             // for testing
             this._log = function () {
                 this._logs.push(arguments);
@@ -414,7 +415,7 @@ angular.module('umc-angular-google-analytics', [])
 
                 if (this.trackers[0].trackEnhancedEcommerce) {
                     $window.__gaTracker('ec:addProduct', product);
-                    this._log('ec:addImpression', arguments);
+                    this._log('ec:addProduct', arguments);
                 }
 
                 for (var x = 1; x < this.trackers.length; x++) {
