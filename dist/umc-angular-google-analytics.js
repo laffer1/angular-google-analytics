@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.2.2 - 2016-08-03
+ * @version v0.2.3 - 2016-08-03
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -69,55 +69,55 @@ angular.module('umc-angular-google-analytics', [])
         };
 
         this.trackEcommerce = function (doTrack, name) {
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackEcommerce = doTrack;
-                return true;
+                return doTrack;
             }
 
             for (var i = 1; i < this.trackers.length; i++) {
                 if (this.trackers[i].name === name) {
                     this.trackers[i].trackEcommerce = doTrack;
-                    return true;
+                    return doTrack;
                 }
             }
 
-            return true;
+            return false;
         };
 
         this.trackEnhancedEcommerce = function (doTrack, name) {
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackEnhancedEcommerce = doTrack;
-                return true;
+                return doTrack;
             }
 
             for (var i = 1; i < this.trackers.length; i++) {
                 if (this.trackers[i].name === name) {
                     this.trackers[i].trackEnhancedEcommerce = doTrack;
-                    return true;
+                    return doTrack;
                 }
             }
 
-            return true;
+            return false;
         };
 
         this.trackDisplayFeatures = function (doTrack, name) {
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].trackDisplayfeatures = doTrack;
-                return true;
+                return doTrack;
             }
 
             for (var i = 1; i < this.trackers.length; i++) {
                 if (this.trackers[i].name === name) {
                     this.trackers[i].trackDisplayfeatures = doTrack;
-                    return true;
+                    return doTrack;
                 }
             }
-            return true;
+            return false;
         };
 
         this.addTracker = function (code, name) {
             // handle special case of primary tracker
-            if (name === null || name === '') {
+            if (typeof name === 'undefined' || name === null || name === '') {
                 this.trackers[0].code = code;
                 return;
             }
@@ -199,6 +199,7 @@ angular.module('umc-angular-google-analytics', [])
                 })();
                 created = true;
             };
+
             // for testing
             this._log = function () {
                 this._logs.push(arguments);
@@ -421,7 +422,7 @@ angular.module('umc-angular-google-analytics', [])
 
                 if (this.trackers[0].trackEnhancedEcommerce) {
                     $window.__gaTracker('ec:addProduct', product);
-                    this._log('ec:addImpression', arguments);
+                    this._log('ec:addProduct', arguments);
                 }
 
                 for (var x = 1; x < this.trackers.length; x++) {

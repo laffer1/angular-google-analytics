@@ -23,18 +23,18 @@ describe('umc-angular-google-analytics', function(){
 
       it('should generate pageTracks', function() {
         inject(function(Analytics) {
-          expect(Analytics._logs.length).toBe(4); //app init
+          expect(Analytics._logs.length).toBe(5); //app init
           Analytics.trackPage('test');
-          expect(Analytics._logs.length).toBe(5);
-          Analytics.trackEvent('test');
           expect(Analytics._logs.length).toBe(6);
+          Analytics.trackEvent('test');
+          expect(Analytics._logs.length).toBe(7);
         });
       });
 
       it('should generate an trackpage to routeChangeSuccess', function() {
         inject(function(Analytics, $rootScope) {
           $rootScope.$broadcast('$routeChangeSuccess');
-          expect(Analytics._logs.length).toBe(5); //app init + event
+          expect(Analytics._logs.length).toBe(6); //app init + event
         });
       });
   });
@@ -43,27 +43,27 @@ describe('umc-angular-google-analytics', function(){
 
       it('should add transcation', function() {
         inject(function(Analytics) {
-          expect(Analytics._logs.length).toBe(4);
-          Analytics.addTrans('1', '', '2.42', '0.42', '0', 'Amsterdam', '', 'Netherlands');
           expect(Analytics._logs.length).toBe(5);
+          Analytics.addTrans('1', '', '2.42', '0.42', '0', 'Amsterdam', '', 'Netherlands');
+          expect(Analytics._logs.length).toBe(7);
         });
       });
 
       it('should add an item to transaction', function() {
         inject(function(Analytics) {
-          expect(Analytics._logs.length).toBe(4);
-          Analytics.addItem('1', 'sku-1', 'Test product 1', 'Testing', '1', '1');
           expect(Analytics._logs.length).toBe(5);
+          Analytics.addItem('1', 'sku-1', 'Test product 1', 'Testing', '1', '1');
+          expect(Analytics._logs.length).toBe(7);
           Analytics.addItem('1', 'sku-2', 'Test product 2', 'Testing', '1', '1');
-          expect(Analytics._logs.length).toBe(6);
+          expect(Analytics._logs.length).toBe(9);
         });
       });
 
       it('should track the transaction', function() {
         inject(function(Analytics) {
-          expect(Analytics._logs.length).toBe(4);
-          Analytics.trackTrans();
           expect(Analytics._logs.length).toBe(5);
+          Analytics.trackTrans();
+          expect(Analytics._logs.length).toBe(7);
         });
       });
   });
@@ -76,7 +76,7 @@ describe('umc-angular-google-analytics', function(){
     it('should NOT generate an trackpage to routeChangeSuccess', function() {
       inject(function(Analytics, $rootScope) {
         $rootScope.$broadcast('$routeChangeSuccess');
-        expect(Analytics._logs.length).toBe(3);
+        expect(Analytics._logs.length).toBe(4);
       });
     });
   });
@@ -102,7 +102,7 @@ describe('umc-angular-google-analytics', function(){
     it('should inject the Analytics script', function() {
       inject(function(Analytics, $rootScope) {
         $rootScope.$broadcast('$stateChangeSuccess');
-        expect(Analytics._logs.length).toBe(5);
+        expect(Analytics._logs.length).toBe(6);
       });
     });
 
@@ -118,25 +118,25 @@ describe('umc-angular-google-analytics', function(){
         }));
         it('should add impression', function () {
             inject(function (Analytics) {
-                expect(Analytics._logs.length).toBe(4);
-                Analytics.addImpression('1', 'name', 'cat', 'brand', 'varient', 'list', 'position', 'dimension');
                 expect(Analytics._logs.length).toBe(5);
+                Analytics.addImpression('1', 'name', 'cat', 'brand', 'varient', 'list', 'position', 'dimension');
+                expect(Analytics._logs.length).toBe(7);
             });
         });
 
         it('should add a product', function () {
             inject(function (Analytics) {
-                expect(Analytics._logs.length).toBe(4);
-                Analytics.addProduct('1', 'name', 'cat', 'brand', 'varient', 'position', 'dimension');
                 expect(Analytics._logs.length).toBe(5);
+                Analytics.addProduct('1', 'name', 'cat', 'brand', 'varient', 'position', 'dimension');
+                expect(Analytics._logs.length).toBe(7);
             });
         });
 
         it('should set an action', function () {
             inject(function (Analytics) {
-                expect(Analytics._logs.length).toBe(4);
-                Analytics.setAction('click', 'foo');
                 expect(Analytics._logs.length).toBe(5);
+                Analytics.setAction('click', 'foo');
+                expect(Analytics._logs.length).toBe(7);
             });
         });
     });
