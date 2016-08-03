@@ -1,3 +1,8 @@
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/laffer1/angular-google-analytics/compare/0.2.1...v0.2.2) (2016-08-03)
+
+Fix a bug where ec and ecommerce plugins aren't getting loaded.
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/laffer1/angular-google-analytics/compare/0.2.0...v0.2.1) (2016-07-28)
 
