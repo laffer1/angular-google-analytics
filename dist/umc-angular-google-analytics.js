@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.2.4 - 2016-08-04
+ * @version v0.2.5 - 2016-08-04
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -702,11 +702,11 @@ angular.module('umc-angular-google-analytics', [])
                     me._trackEvent(category, action, label, value);
                 },
                 // enhanced ecommerce
-                addImpression: function (id, name, category, brand, variant, list, position, dimension1) {
-                    me._addImpression(id, name, category, brand, variant, list, position, dimension1);
+                addImpression: function (id, name, category, brand, variant, list, position, dimension1, price) {
+                    me._addImpression(id, name, category, brand, variant, list, position, dimension1, price);
                 },
-                addProduct: function (id, name, category, brand, variant, position, dimension1) {
-                    me._addProduct(id, name, category, brand, variant, position, dimension1);
+                addProduct: function (id, name, category, brand, variant, position, dimension1, price, qty, coupon) {
+                    me._addProduct(id, name, category, brand, variant, position, dimension1, price, qty, coupon);
                 },
                 addPromo: function(id, name, creative, position) {
                     me._addPromo(id, name, creative, position);
