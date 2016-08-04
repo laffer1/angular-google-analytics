@@ -344,6 +344,7 @@ angular.module('umc-angular-google-analytics', [])
 
             /**
              * Add enhanced ecommerce impression
+             *
              * @param id  product id  (string)        required
              * @param name  product name (string)     required
              * @param category product category (string)
@@ -352,9 +353,10 @@ angular.module('umc-angular-google-analytics', [])
              * @param list  product list (string)
              * @param position  product position (number)
              * @param dimension1 custom dimension (string)
+             * @param price price of the product (currency)
              * @private
              */
-            this._addImpression = function (id, name, category, brand, variant, list, position, dimension1) {
+            this._addImpression = function (id, name, category, brand, variant, list, position, dimension1, price) {
                 if (angular.isUndefined($window.__gaTracker)) {
                     return;
                 }
@@ -369,7 +371,8 @@ angular.module('umc-angular-google-analytics', [])
                     'variant': variant,
                     'list': list,
                     'position': position,
-                    'dimension1': dimension1
+                    'dimension1': dimension1,
+                    'price': price
                 };
 
                 if (this.trackers[0].trackEnhancedEcommerce) {
@@ -387,6 +390,7 @@ angular.module('umc-angular-google-analytics', [])
 
             /**
              * Add enhanced ecommerce product
+             *
              * @param id  product id  (string)        required
              * @param name  product name (string)     required
              * @param category product category (string)
@@ -394,9 +398,12 @@ angular.module('umc-angular-google-analytics', [])
              * @param variant product variant (string)
              * @param position  product position (number)
              * @param dimension1 custom dimension (string)
+             * @param price unit price (currency)
+             * @param qty quantity (int)
+             * @param coupon item coupon (string)
              * @private
              */
-            this._addProduct = function (id, name, category, brand, variant, position, dimension1) {
+            this._addProduct = function (id, name, category, brand, variant, position, dimension1, price, qty, coupon) {
                 if (angular.isUndefined($window.__gaTracker)) {
                     return;
                 }
@@ -410,7 +417,10 @@ angular.module('umc-angular-google-analytics', [])
                     'brand': brand,
                     'variant': variant,
                     'position': position,
-                    'dimension1': dimension1
+                    'dimension1': dimension1,
+                    'price': price,
+                    'quantity': qty,
+                    'coupon': coupon
                 };
 
                 if (this.trackers[0].trackEnhancedEcommerce) {
