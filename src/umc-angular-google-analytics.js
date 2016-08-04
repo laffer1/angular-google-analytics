@@ -437,6 +437,50 @@ angular.module('umc-angular-google-analytics', [])
             };
 
             /**
+             * Add a promotional item for enhanced ecommerce.
+             *
+             * Important: Do not send a promotion with product data.
+             *
+             * Unlike most routines, this sets the action and triggers a click event automatically. A single call
+             * will send the data.
+             *
+             * @param id
+             * @param name
+             * @param creative
+             * @param position
+             * @private
+             */
+            this._addPromo = function(id, name, creative, position) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                this._loadEnhancedEcommerce();
+
+                var promo = {
+                    'id': id,
+                    'name': name,
+                    'creative': creative,
+                    'position': position
+                };
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:addPromo', promo);
+                    this._log('ec:addPromo', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:addPromo', promo);
+                        this._log('ec:addPromo', arguments);
+                    }
+                }
+
+                this._setAction('promo_click');
+                this._trackEvent('Internal Promotions', 'click', name);
+            };
+
+            /**
              * set enhanced ecommerce action
              * @param action type of event such as a 'click'
              * @param data data to send such as a {'list': 'Search Results'}
@@ -656,6 +700,9 @@ angular.module('umc-angular-google-analytics', [])
                 },
                 addProduct: function (id, name, category, brand, variant, position, dimension1) {
                     me._addProduct(id, name, category, brand, variant, position, dimension1);
+                },
+                addPromo: function(id, name, creative, position) {
+                    me._addPromo(id, name, creative, position);
                 },
                 setAction: function (action, data) {
                     me._setAction(action, data);
