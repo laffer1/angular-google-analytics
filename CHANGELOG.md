@@ -1,3 +1,8 @@
+<a name="0.2.4"></a>
+## [0.2.4](https://github.com/laffer1/angular-google-analytics/compare/0.2.3...v0.2.4) (2016-08-04)
+
+Add promo support and additional fields to product (price, qty, coupon) and impression (price)
+
 <a name="0.2.2"></a>
 ## [0.2.2](https://github.com/laffer1/angular-google-analytics/compare/0.2.1...v0.2.2) (2016-08-03)
 

@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.2.3 - 2016-08-03
+ * @version v0.2.4 - 2016-08-04
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -351,6 +351,7 @@ angular.module('umc-angular-google-analytics', [])
 
             /**
              * Add enhanced ecommerce impression
+             *
              * @param id  product id  (string)        required
              * @param name  product name (string)     required
              * @param category product category (string)
@@ -359,9 +360,10 @@ angular.module('umc-angular-google-analytics', [])
              * @param list  product list (string)
              * @param position  product position (number)
              * @param dimension1 custom dimension (string)
+             * @param price price of the product (currency)
              * @private
              */
-            this._addImpression = function (id, name, category, brand, variant, list, position, dimension1) {
+            this._addImpression = function (id, name, category, brand, variant, list, position, dimension1, price) {
                 if (angular.isUndefined($window.__gaTracker)) {
                     return;
                 }
@@ -376,7 +378,8 @@ angular.module('umc-angular-google-analytics', [])
                     'variant': variant,
                     'list': list,
                     'position': position,
-                    'dimension1': dimension1
+                    'dimension1': dimension1,
+                    'price': price
                 };
 
                 if (this.trackers[0].trackEnhancedEcommerce) {
@@ -394,6 +397,7 @@ angular.module('umc-angular-google-analytics', [])
 
             /**
              * Add enhanced ecommerce product
+             *
              * @param id  product id  (string)        required
              * @param name  product name (string)     required
              * @param category product category (string)
@@ -401,9 +405,12 @@ angular.module('umc-angular-google-analytics', [])
              * @param variant product variant (string)
              * @param position  product position (number)
              * @param dimension1 custom dimension (string)
+             * @param price unit price (currency)
+             * @param qty quantity (int)
+             * @param coupon item coupon (string)
              * @private
              */
-            this._addProduct = function (id, name, category, brand, variant, position, dimension1) {
+            this._addProduct = function (id, name, category, brand, variant, position, dimension1, price, qty, coupon) {
                 if (angular.isUndefined($window.__gaTracker)) {
                     return;
                 }
@@ -417,7 +424,10 @@ angular.module('umc-angular-google-analytics', [])
                     'brand': brand,
                     'variant': variant,
                     'position': position,
-                    'dimension1': dimension1
+                    'dimension1': dimension1,
+                    'price': price,
+                    'quantity': qty,
+                    'coupon': coupon
                 };
 
                 if (this.trackers[0].trackEnhancedEcommerce) {
@@ -431,6 +441,50 @@ angular.module('umc-angular-google-analytics', [])
                         this._log('ec:addProduct', arguments);
                     }
                 }
+            };
+
+            /**
+             * Add a promotional item for enhanced ecommerce.
+             *
+             * Important: Do not send a promotion with product data.
+             *
+             * Unlike most routines, this sets the action and triggers a click event automatically. A single call
+             * will send the data.
+             *
+             * @param id
+             * @param name
+             * @param creative
+             * @param position
+             * @private
+             */
+            this._addPromo = function(id, name, creative, position) {
+                if (angular.isUndefined($window.__gaTracker)) {
+                    return;
+                }
+
+                this._loadEnhancedEcommerce();
+
+                var promo = {
+                    'id': id,
+                    'name': name,
+                    'creative': creative,
+                    'position': position
+                };
+
+                if (this.trackers[0].trackEnhancedEcommerce) {
+                    $window.__gaTracker('ec:addPromo', promo);
+                    this._log('ec:addPromo', arguments);
+                }
+
+                for (var x = 1; x < this.trackers.length; x++) {
+                    if (this.trackers[x].trackEnhancedEcommerce) {
+                        $window.__gaTracker(this.trackers[x].name + '.ec:addPromo', promo);
+                        this._log('ec:addPromo', arguments);
+                    }
+                }
+
+                this._setAction('promo_click');
+                this._trackEvent('Internal Promotions', 'click', name);
             };
 
             /**
@@ -653,6 +707,9 @@ angular.module('umc-angular-google-analytics', [])
                 },
                 addProduct: function (id, name, category, brand, variant, position, dimension1) {
                     me._addProduct(id, name, category, brand, variant, position, dimension1);
+                },
+                addPromo: function(id, name, creative, position) {
+                    me._addPromo(id, name, creative, position);
                 },
                 setAction: function (action, data) {
                     me._setAction(action, data);
