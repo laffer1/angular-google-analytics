@@ -695,11 +695,11 @@ angular.module('umc-angular-google-analytics', [])
                     me._trackEvent(category, action, label, value);
                 },
                 // enhanced ecommerce
-                addImpression: function (id, name, category, brand, variant, list, position, dimension1) {
-                    me._addImpression(id, name, category, brand, variant, list, position, dimension1);
+                addImpression: function (id, name, category, brand, variant, list, position, dimension1, price) {
+                    me._addImpression(id, name, category, brand, variant, list, position, dimension1, price);
                 },
-                addProduct: function (id, name, category, brand, variant, position, dimension1) {
-                    me._addProduct(id, name, category, brand, variant, position, dimension1);
+                addProduct: function (id, name, category, brand, variant, position, dimension1, price, qty, coupon) {
+                    me._addProduct(id, name, category, brand, variant, position, dimension1, price, qty, coupon);
                 },
                 addPromo: function(id, name, creative, position) {
                     me._addPromo(id, name, creative, position);
