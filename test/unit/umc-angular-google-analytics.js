@@ -5,12 +5,16 @@
 describe('umc-angular-google-analytics', function(){
 
     beforeEach(module('umc-angular-google-analytics'));
-    beforeEach(module(function(AnalyticsProvider) {
-      AnalyticsProvider.setAccount('UA-XXXXXX-xx');
-      AnalyticsProvider.addTracker('UA-XXXXXX-xx', 'foo');
+    beforeEach(module(function (AnalyticsProvider) {
+        // Google Analytics
+        AnalyticsProvider.setAccount('UA-XXXXXX-xx');
+        AnalyticsProvider.addTracker('UA-XXXXXX-xx', 'foo');
 
         AnalyticsProvider.trackEcommerce(true);
         AnalyticsProvider.trackEcommerce(true, 'foo');
+
+        // facebook pixel
+        AnalyticsProvider.addPixelTracker('12345');
     }));
 
    describe('automatic trackPages', function() {
@@ -31,7 +35,7 @@ describe('umc-angular-google-analytics', function(){
         });
       });
 
-      it('should generate an trackpage to routeChangeSuccess', function() {
+      it('should generate a trackpage to routeChangeSuccess', function() {
         inject(function(Analytics, $rootScope) {
           $rootScope.$broadcast('$routeChangeSuccess');
           expect(Analytics._logs.length).toBe(6); //app init + event
@@ -41,7 +45,7 @@ describe('umc-angular-google-analytics', function(){
 
   describe('e-commerce transactions', function() {
 
-      it('should add transcation', function() {
+      it('should add transaction', function() {
         inject(function(Analytics) {
           expect(Analytics._logs.length).toBe(5);
           Analytics.addTrans('1', '', '2.42', '0.42', '0', 'Amsterdam', '', 'Netherlands');
@@ -141,4 +145,35 @@ describe('umc-angular-google-analytics', function(){
         });
     });
 
+    describe('facebook pixel', function () {
+        it('should inject the pixel script', function () {
+            inject(function (Analytics) {
+                expect(document.querySelectorAll("script[src='https://connect.facebook.net/en_US/fbevents.js']").length).toBe(1);
+            });
+        });
+
+        it('should track a page', function () {
+            inject(function (Analytics) {
+                expect(Analytics._logs.length).toBe(5);
+                Analytics.trackPixelPage();
+                expect(Analytics._logs.length).toBe(6);
+            });
+        });
+
+        it('should add to cart', function () {
+            inject(function (Analytics) {
+                expect(Analytics._logs.length).toBe(5);
+                Analytics.trackPixelAddToCart();
+                expect(Analytics._logs.length).toBe(6);
+            });
+        });
+
+        it('should track a search', function () {
+            inject(function (Analytics) {
+                expect(Analytics._logs.length).toBe(5);
+                Analytics.trackPixelSearch();
+                expect(Analytics._logs.length).toBe(6);
+            });
+        });
+    });
 });

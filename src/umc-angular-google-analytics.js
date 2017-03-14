@@ -210,7 +210,7 @@ angular.module('umc-angular-google-analytics', [])
                     return;
 
                 // inject the google analytics tag
-                (function () {
+                (function (pixelCode) {
                     if (angular.isUndefined($document[0]))
                         return;
 
@@ -234,9 +234,9 @@ angular.module('umc-angular-google-analytics', [])
                         s = b.getElementsByTagName(e)[0];
                         s.parentNode.insertBefore(t, s);
                         $window.pixel = f;
-                    }(window,
-                        document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-                    fbq('init', this.pixelCode);
+                    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+                    $window.pixel.fbq('init', pixelCode);
                 })();
             };
 
