@@ -265,6 +265,8 @@ angular.module('umc-angular-google-analytics', [])
                 } else {
                     $window.pixel.fbq('track', action, data);
                 }
+
+                this._log('pixel-' + action, data);
             };
 
             // for testing
