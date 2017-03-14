@@ -215,7 +215,7 @@ angular.module('umc-angular-google-analytics', [])
                         return;
 
                     // Facebook Pixel Code
-                    !function (f, b, e, v, n, t, s) {
+                    !(function (f, b, e, v, n, t, s) {
                         if (f.fbq)
                             return;
                         n = f.fbq = function () {
@@ -234,7 +234,7 @@ angular.module('umc-angular-google-analytics', [])
                         s = b.getElementsByTagName(e)[0];
                         s.parentNode.insertBefore(t, s);
                         $window.pixel = f;
-                    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+                    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'));
 
                     $window.pixel.fbq('init', pixelCode);
                 })();
