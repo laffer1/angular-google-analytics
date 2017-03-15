@@ -238,6 +238,8 @@ angular.module('umc-angular-google-analytics', [])
 
                     $window.pixel.fbq('init', pixelCode);
                 })();
+
+                this._trackPixelPage();
             };
 
             /**
