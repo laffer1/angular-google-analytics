@@ -816,13 +816,18 @@ angular.module('umc-angular-google-analytics', [])
                  * value of content view conversions.
                  * @param amount
                  * @param currency
+                 * @param content_ids unique array of ids
+                 * @param content_type type of item, usually product
                  */
-                trackPixelViewContent: function(amount, currency) {
+                trackPixelViewContent: function(amount, currency, content_ids, content_type) {
                     if (angular.isUndefined(currency))
                         currency = 'USD';
                     if (angular.isUndefined(amount))
                         amount = 0;
-                    me._trackPixel('ViewContent', {value: amount, currency: currency});
+                    if (angular.isUndefined(content_type))
+                        content_type = 'product';
+                    me._trackPixel('ViewContent', {value: amount, currency: currency,
+                            content_ids: content_ids, content_type: content_type});
                 },
                 /**
                  * The search event should be placed on any search results page to track when people complete a search.
@@ -839,12 +844,18 @@ angular.module('umc-angular-google-analytics', [])
                  * website. Add parameters for conversion value (amount per content view) and currency to
                  * measure the value of add to cart conversions.
                  */
-                trackPixelAddToCart: function(amount, currency) {
+                trackPixelAddToCart: function(amount, currency, content_ids, content_type) {
                     if (angular.isUndefined(currency))
                         currency = 'USD';
                     if (angular.isUndefined(amount))
                         return;
-                    me._trackPixel('AddToCart', {value: amount, currency: currency});
+                    if (angular.isUndefined(content_type))
+                        content_type = 'product';
+
+                    me._trackPixel('AddToCart', {
+                        value: amount, currency: currency,
+                        content_ids: content_ids, content_type: content_type
+                    });
                 },
                 /**
                  * The add to wishlist event should be triggered when a person adds or saves an item to a wishlist on
@@ -880,13 +891,18 @@ angular.module('umc-angular-google-analytics', [])
                  * (amount per content view) and currency to measure the value of purchase conversions.
                  * @param amount
                  * @param currency
+                 * @param content_ids unique id array of products
+                 * @param content_type type of item (usually product)
                  */
-                trackPixelPurchase: function (amount, currency) {
+                trackPixelPurchase: function (amount, currency, content_ids, content_type) {
                     if (angular.isUndefined(currency))
                         currency = 'USD';
                     if (angular.isUndefined(amount))
                         return;
-                    me._trackPixel('Purchase', {value: amount, currency: currency});
+                    if (angular.isUndefined(content_type))
+                        content_type = 'product';
+
+                    me._trackPixel('Purchase', {value: amount, currency: currency, content_type: content_type, content_ids: content_ids});
                 },
                 /**
                  * The lead event should be placed on a form confirmation page or triggered by a submit button when a
