@@ -3,11 +3,10 @@
 
 Added preliminary support for facebook pixel.
 
-
 <a name="0.2.5"></a>
 ## [0.2.5](https://github.com/laffer1/angular-google-analytics/compare/0.2.4...v0.2.5) (2016-08-04)
 
-
+Fix problems with product and impression parameters.
 
 <a name="0.2.4"></a>
 ## [0.2.4](https://github.com/laffer1/angular-google-analytics/compare/0.2.3...v0.2.4) (2016-08-04)
