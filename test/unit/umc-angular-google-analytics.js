@@ -164,7 +164,7 @@ describe('umc-angular-google-analytics', function(){
             inject(function (Analytics) {
                 expect(Analytics._logs.length).toBe(6);
                 Analytics.trackPixelAddToCart();
-                expect(Analytics._logs.length).toBe(7);
+                expect(Analytics._logs.length).toBe(6);
             });
         });
 
