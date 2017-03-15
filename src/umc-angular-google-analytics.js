@@ -810,8 +810,29 @@ angular.module('umc-angular-google-analytics', [])
                 trackPixelPage: function() {
                     me._trackPixelPage();
                 },
-                trackPixelSearch: function() {
-                    me._trackPixel('Search');
+                /**
+                 * The view content event should be placed on any content or product detail pages to track when people
+                 * visit. Add parameters for conversion value (amount per content view) and currency to measure the
+                 * value of content view conversions.
+                 * @param amount
+                 * @param currency
+                 */
+                trackPixelViewContent: function(amount, currency) {
+                    if (angular.isUndefined(currency))
+                        currency = 'USD';
+                    if (angular.isUndefined(amount))
+                        amount = 0;
+                    me._trackPixel('ViewContent', {value: amount, currency: currency});
+                },
+                /**
+                 * The search event should be placed on any search results page to track when people complete a search.
+                 * Add a search string parameter to track and optimize for specific search terms.
+                 * @param term
+                 */
+                trackPixelSearch: function(term) {
+                    me._trackPixel('Search', {
+                        search_string: term
+                    });
                 },
                 trackPixelAddToCart: function() {
                     me._trackPixel('AddToCart');
