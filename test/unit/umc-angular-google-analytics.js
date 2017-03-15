@@ -171,7 +171,15 @@ describe('umc-angular-google-analytics', function(){
         it('should track a search', function () {
             inject(function (Analytics) {
                 expect(Analytics._logs.length).toBe(6);
-                Analytics.trackPixelSearch();
+                Analytics.trackPixelSearch('test');
+                expect(Analytics._logs.length).toBe(7);
+            });
+        });
+
+        it('should track a view content', function () {
+            inject(function (Analytics) {
+                expect(Analytics._logs.length).toBe(6);
+                Analytics.trackPixelViewContent(1, 'USD');
                 expect(Analytics._logs.length).toBe(7);
             });
         });
