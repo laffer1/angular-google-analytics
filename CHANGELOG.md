@@ -1,3 +1,10 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/laffer1/angular-google-analytics/compare/0.2.6...v0.3.0) (2017-03-15)
+
+Added additional parameters to many pixel calls to track amount, currency type. 
+
+Add custom event support for pixel.
+
 <a name="0.2.6"></a>
 ## [0.2.6](https://github.com/laffer1/angular-google-analytics/compare/0.2.5...v0.2.6) (2017-03-15)
 
