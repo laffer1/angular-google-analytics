@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.2.5 - 2016-08-04
+ * @version v0.2.6 - 2017-03-15
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -11,7 +11,6 @@ angular.module('umc-angular-google-analytics', [])
     .provider('Analytics', function () {
         'use strict';
 
-        var created = false;
         var trackRoutes = true;
         var trackPrefix = '';
         var domainName;
@@ -19,6 +18,7 @@ angular.module('umc-angular-google-analytics', [])
         var pageEvent = '$routeChangeSuccess';
 
         this.trackers = [];
+        this.pixelCode = '';
         this._logs = [];
 
         // config methods
@@ -115,6 +115,14 @@ angular.module('umc-angular-google-analytics', [])
             return false;
         };
 
+        /**
+         * Add Facebook Pixel tracker.
+         * @param code
+         */
+        this.addPixelTracker = function(code) {
+            this.pixelCode = code;
+        };
+
         this.addTracker = function (code, name) {
             // handle special case of primary tracker
             if (typeof name === 'undefined' || name === null || name === '') {
@@ -182,7 +190,8 @@ angular.module('umc-angular-google-analytics', [])
                 this._loadEnhancedEcommerce();
 
                 if (trackRoutes) {
-                    this._trackPage($location.path(), $rootScope.pageTitle); // TODO: this is too specific to our apps
+                    // TODO: this is too specific to our apps
+                    this._trackPage($location.path(), $rootScope.pageTitle);
                 }
 
                 // inject the google analytics tag
@@ -197,7 +206,76 @@ angular.module('umc-angular-google-analytics', [])
                     var s = $document[0].getElementsByTagName('script')[0];
                     s.parentNode.insertBefore(gaTag, s);
                 })();
-                created = true;
+            };
+
+            /**
+             * Create a Facebook pixel script tag.
+             * @private
+             */
+            this._createPixelScriptTag = function () {
+                if (angular.isUndefined(this) || this.pixelCode === '')
+                    return;
+
+                // inject the google analytics tag
+                (function (pixelCode) {
+                    if (angular.isUndefined($document[0]))
+                        return;
+
+                    // Facebook Pixel Code
+                    !(function (f, b, e, v, n, t, s) {
+                        if (f.fbq)
+                            return;
+                        n = f.fbq = function () {
+                            n.callMethod ?
+                                n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+                        };
+                        if (!f._fbq)
+                            f._fbq = n;
+                        n.push = n;
+                        n.loaded = !0;
+                        n.version = '2.0';
+                        n.queue = [];
+                        t = b.createElement(e);
+                        t.async = !0;
+                        t.src = v;
+                        s = b.getElementsByTagName(e)[0];
+                        s.parentNode.insertBefore(t, s);
+                        $window.pixel = f;
+                    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'));
+
+                    $window.pixel.fbq('init', pixelCode);
+                })();
+
+                this._trackPixelPage();
+            };
+
+            /**
+             * Track pixel page view
+             * @private
+             */
+            this._trackPixelPage = function() {
+                this._trackPixel('PageView');
+            };
+
+            /**
+             * Track facebook pixel events.
+             *
+             * @param action ViewContent, Search, AddToCart, etc.
+             * @param data
+             * @private
+             */
+            this._trackPixel = function(action, data) {
+                if (angular.isUndefined($window.pixel)) {
+                    return;
+                }
+
+                if (angular.isUndefined(data)) {
+                    $window.pixel.fbq('track', action);
+                } else {
+                    $window.pixel.fbq('track', action, data);
+                }
+
+                this._log('pixel-' + action, data);
             };
 
             // for testing
@@ -272,8 +350,6 @@ angular.module('umc-angular-google-analytics', [])
                 }
 
                 this._loadDisplayFeatures();
-
-                // TODO: we had the require calls here for displayfeatures. do we actually need it here?
 
                 if (angular.isUndefined(url)) {
                     url = $location.path();
@@ -675,8 +751,11 @@ angular.module('umc-angular-google-analytics', [])
             };
 
             // --------- initialization steps -----------------------
-            // creates the ganalytics tracker
+            // creates the Google Analytics tracker
             this._createScriptTag();
+
+            // create pixel tracker if code exists.
+            this._createPixelScriptTag();
 
             var me = this;
 
@@ -734,6 +813,34 @@ angular.module('umc-angular-google-analytics', [])
                     if (angular.isDefined($window.__gaTracker)) {
                         $window.__gaTracker(arguments);
                     }
+                },
+                trackPixelPage: function() {
+                    me._trackPixelPage();
+                },
+                trackPixelSearch: function() {
+                    me._trackPixel('Search');
+                },
+                trackPixelAddToCart: function() {
+                    me._trackPixel('AddToCart');
+                },
+                trackPixelInitiateCheckout: function () {
+                    me._trackPixel('InitiateCheckout');
+                },
+                trackPixelAddPaymentInfo: function () {
+                    me._trackPixel('AddPaymentInfo');
+                },
+                trackPixelPurchase: function (amount, currency) {
+                    if (angular.isUndefined(currency))
+                        currency = 'USD';
+                    if (angular.isUndefined(amount))
+                        return;
+                    me._trackPixel('Purchase', {value: amount, currency: currency});
+                },
+                trackPixelLead: function () {
+                    me._trackPixel('Lead');
+                },
+                trackPixelCompleteRegistration: function () {
+                    me._trackPixel('CompleteRegistration');
                 }
             };
         }];
