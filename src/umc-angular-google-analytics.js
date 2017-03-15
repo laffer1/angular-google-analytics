@@ -834,15 +834,53 @@ angular.module('umc-angular-google-analytics', [])
                         search_string: term
                     });
                 },
-                trackPixelAddToCart: function() {
-                    me._trackPixel('AddToCart');
+                /**
+                 * The add to cart event should be triggered when a person adds an item to a shopping cart on your
+                 * website. Add parameters for conversion value (amount per content view) and currency to
+                 * measure the value of add to cart conversions.
+                 */
+                trackPixelAddToCart: function(amount, currency) {
+                    if (angular.isUndefined(currency))
+                        currency = 'USD';
+                    if (angular.isUndefined(amount))
+                        return;
+                    me._trackPixel('AddToCart', {value: amount, currency: currency});
                 },
+                /**
+                 * The add to wishlist event should be triggered when a person adds or saves an item to a wishlist on
+                 * your website. Add parameters for conversion value (amount per content view) and currency to measure
+                 * the value of add to wishlist conversions.
+                 * @param amount
+                 * @param currency
+                 */
+                trackPixelAddToWishList: function(amount, currency) {
+                    if (angular.isUndefined(currency))
+                        currency = 'USD';
+                    if (angular.isUndefined(amount))
+                        return;
+                    me._trackPixel('AddToWishList', {value: amount, currency: currency});
+                },
+                /**
+                 * The initiate checkout event should be triggered when a person enters the checkout flow on your
+                 * website.
+                 */
                 trackPixelInitiateCheckout: function () {
                     me._trackPixel('InitiateCheckout');
                 },
+                /**
+                 * The add payment info event should be triggered when a person adds payment information to an account
+                 * or in a checkout flow.
+                 */
                 trackPixelAddPaymentInfo: function () {
                     me._trackPixel('AddPaymentInfo');
                 },
+                /**
+                 * The purchase event should be placed on an order confirmation page or be triggered from a complete
+                 * order button, indicating that a person has purchased a product. Add parameters for conversion value
+                 * (amount per content view) and currency to measure the value of purchase conversions.
+                 * @param amount
+                 * @param currency
+                 */
                 trackPixelPurchase: function (amount, currency) {
                     if (angular.isUndefined(currency))
                         currency = 'USD';
@@ -850,11 +888,40 @@ angular.module('umc-angular-google-analytics', [])
                         return;
                     me._trackPixel('Purchase', {value: amount, currency: currency});
                 },
-                trackPixelLead: function () {
-                    me._trackPixel('Lead');
+                /**
+                 * The lead event should be placed on a form confirmation page or triggered by a submit button when a
+                 * lead form is completed (ex: when someone signs up for a newsletter). Add parameters for conversion
+                 * value (amount per content view) and currency to measure the value of lead conversions.
+                 * @param amount
+                 * @param currency
+                 */
+                trackPixelLead: function (amount, currency) {
+                    if (angular.isUndefined(currency))
+                        currency = 'USD';
+                    if (angular.isUndefined(amount))
+                        return;
+                    me._trackPixel('Lead', {value: amount, currency: currency});
                 },
-                trackPixelCompleteRegistration: function () {
-                    me._trackPixel('CompleteRegistration');
+                /**
+                 * The complete registration event should be placed on a registration form confirmation page or triggered
+                 * by a submit button when a registration form is completed (ex: when someone subscribes to a service).
+                 * Add parameters for conversion value (amount per content view) and currency to measure the value of
+                 * complete registration conversions.
+                 */
+                trackPixelCompleteRegistration: function (amount, currency) {
+                    if (angular.isUndefined(currency))
+                        currency = 'USD';
+                    if (angular.isUndefined(amount))
+                        return;
+                    me._trackPixel('CompleteRegistration', {value: amount, currency: currency});
+                },
+                /**
+                 * Track custom events.
+                 * @param name the name of the event
+                 * @param data any data passed as an object {}
+                 */
+                trackPixelCustom: function(name, data) {
+                    me._trackPixel(name, data);
                 }
             };
         }];
