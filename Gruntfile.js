@@ -127,9 +127,6 @@ module.exports = function(grunt) {
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  // Load the plugin that provides the "watch" task.
-  //grunt.loadNpmTasks('grunt-contrib-watch');
-
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-conventional-changelog');
 
