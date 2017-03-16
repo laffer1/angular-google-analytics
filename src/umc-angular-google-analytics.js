@@ -209,6 +209,11 @@ angular.module('umc-angular-google-analytics', [])
                 if (angular.isUndefined(this) || this.pixelCode === '')
                     return;
 
+                if (typeof $window.pixel !== 'undefined' && typeof $window.pixel.fbq !== 'undefined') {
+                    this._log('facebook pixel already initialized');
+                    return;
+                }
+
                 // inject the google analytics tag
                 (function (pixelCode) {
                     if (angular.isUndefined($document[0]))
