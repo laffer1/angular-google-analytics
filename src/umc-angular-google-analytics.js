@@ -11,7 +11,7 @@ angular.module('umc-angular-google-analytics', [])
         var pageEvent = '$routeChangeSuccess';
 
         this.trackers = [];
-        this.pixelCode = '';
+        this.pixelCode = 0;
         this._logs = [];
 
         // config methods
