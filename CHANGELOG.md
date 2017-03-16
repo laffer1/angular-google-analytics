@@ -1,3 +1,10 @@
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/laffer1/angular-google-analytics/compare/0.3.1...v0.3.2) (2017-03-16)
+
+Update angular dependencies to support through 1.5.6.
+
+Add a sanity check to avoid initializing facebook pixel twice.
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/laffer1/angular-google-analytics/compare/0.3.0...v0.3.1) (2017-03-16)
 

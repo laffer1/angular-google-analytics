@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.3.1 - 2017-03-16
+ * @version v0.3.2 - 2017-03-16
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -215,6 +215,11 @@ angular.module('umc-angular-google-analytics', [])
             this._createPixelScriptTag = function () {
                 if (angular.isUndefined(this) || this.pixelCode === '')
                     return;
+
+                if (typeof $window.pixel !== 'undefined' && typeof $window.pixel.fbq !== 'undefined') {
+                    this._log('facebook pixel already initialized');
+                    return;
+                }
 
                 // inject the google analytics tag
                 (function (pixelCode) {
