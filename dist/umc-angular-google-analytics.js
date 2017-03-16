@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.3.0 - 2017-03-15
+ * @version v0.3.1 - 2017-03-16
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ angular.module('umc-angular-google-analytics', [])
         var pageEvent = '$routeChangeSuccess';
 
         this.trackers = [];
-        this.pixelCode = '';
+        this.pixelCode = 0;
         this._logs = [];
 
         // config methods
