@@ -1,25 +1,25 @@
 {
-  "author": [
-  	"revolunet",
-	"Luke Palnau <lpalnau@umich.edu>",
-	"Lucas Holt <luke@foolishgames.com>"
-  ],
   "name": "umc-angular-google-analytics",
   "description": "Easy Google Analytics for your AngularJS application",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "homepage": "https://github.com/laffer1/angular-google-analytics",
+  "author": [
+    "revolunet",
+    "Luke Palnau <lpalnau@umich.edu>",
+    "Lucas Holt <luke@foolishgames.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/laffer1/angular-google-analytics.git"
   },
   "main": "./src/umc-angular-google-analytics.js",
   "dependencies": {
-    "angular":  "~1.2.0"
+    "angular":  "1.2.0 - 1.5.0"
   },
   "devDependencies": {
-    "angular-mocks":  "~1.2.9",
-    "angular-scenario": "~1.2.9"
+    "angular-mocks":  "1.2.0 - 1.5.0",
+    "angular-scenario": "1.2.0 - 1.5.0"
   },
   "ignore": "",
   "private": false
