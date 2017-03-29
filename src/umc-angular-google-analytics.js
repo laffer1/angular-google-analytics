@@ -206,8 +206,10 @@ angular.module('umc-angular-google-analytics', [])
              * @private
              */
             this._createPixelScriptTag = function () {
-                if (angular.isUndefined(this) || this.pixelCode === '')
+                if (angular.isUndefined(this) || this.pixelCode === '') {
+                    this._log('Pixel code missing');
                     return;
+                }
 
                 if (typeof $window.fbq !== 'undefined') {
                     this._log('facebook pixel already initialized');
@@ -240,8 +242,6 @@ angular.module('umc-angular-google-analytics', [])
                         s.parentNode.insertBefore(t, s);
                         $window.pixel = n;
                     }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'));
-
-                    $window.fbq('init', pixelCode);
                 })();
 
                 this._trackPixelPage();
@@ -265,6 +265,11 @@ angular.module('umc-angular-google-analytics', [])
             this._trackPixel = function(action, data) {
                 if (angular.isUndefined($window.fbq)) {
                     return;
+                }
+
+                if (angular.isUndefined($window.pixelInit)) {
+                    $window.fbq('init', pixelCode);
+                    $window.pixelInit = true;
                 }
 
                 if (angular.isUndefined(data)) {
