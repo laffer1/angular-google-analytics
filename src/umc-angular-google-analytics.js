@@ -217,7 +217,7 @@ angular.module('umc-angular-google-analytics', [])
                 }
 
                 // inject the google analytics tag
-                (function (pixelCode) {
+                (function () {
                     if (angular.isUndefined($document[0]))
                         return;
 
@@ -268,7 +268,8 @@ angular.module('umc-angular-google-analytics', [])
                 }
 
                 if (angular.isUndefined($window.pixelInit)) {
-                    $window.fbq('init', pixelCode);
+                    this._log('Initialize facebook pixel with code ' + this.pixelCode);
+                    $window.fbq('init', this.pixelCode);
                     $window.pixelInit = true;
                 }
 

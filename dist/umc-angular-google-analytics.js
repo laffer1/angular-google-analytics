@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.3.3 - 2017-03-29
+ * @version v0.3.4 - 2017-03-29
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -213,8 +213,10 @@ angular.module('umc-angular-google-analytics', [])
              * @private
              */
             this._createPixelScriptTag = function () {
-                if (angular.isUndefined(this) || this.pixelCode === '')
+                if (angular.isUndefined(this) || this.pixelCode === '') {
+                    this._log('Pixel code missing');
                     return;
+                }
 
                 if (typeof $window.fbq !== 'undefined') {
                     this._log('facebook pixel already initialized');
@@ -222,7 +224,7 @@ angular.module('umc-angular-google-analytics', [])
                 }
 
                 // inject the google analytics tag
-                (function (pixelCode) {
+                (function () {
                     if (angular.isUndefined($document[0]))
                         return;
 
@@ -247,8 +249,6 @@ angular.module('umc-angular-google-analytics', [])
                         s.parentNode.insertBefore(t, s);
                         $window.pixel = n;
                     }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'));
-
-                    $window.fbq('init', pixelCode);
                 })();
 
                 this._trackPixelPage();
@@ -272,6 +272,12 @@ angular.module('umc-angular-google-analytics', [])
             this._trackPixel = function(action, data) {
                 if (angular.isUndefined($window.fbq)) {
                     return;
+                }
+
+                if (angular.isUndefined($window.pixelInit)) {
+                    this._log('Initialize facebook pixel with code ' + this.pixelCode);
+                    $window.fbq('init', this.pixelCode);
+                    $window.pixelInit = true;
                 }
 
                 if (angular.isUndefined(data)) {
