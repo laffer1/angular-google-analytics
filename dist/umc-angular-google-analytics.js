@@ -1,6 +1,6 @@
 /**
  * UMC Angular Google Analytics - Easy tracking for your AngularJS application
- * @version v0.3.2 - 2017-03-16
+ * @version v0.3.3 - 2017-03-29
  * @link http://github.com/laffer1/angular-google-analytics
  * @author Julien Bouquillon <julien@revolunet.com>,Luke Palnau <lpalnau@umich.edu>,Lucas Holt <lholt@umich.edu>
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -216,7 +216,7 @@ angular.module('umc-angular-google-analytics', [])
                 if (angular.isUndefined(this) || this.pixelCode === '')
                     return;
 
-                if (typeof $window.pixel !== 'undefined' && typeof $window.pixel.fbq !== 'undefined') {
+                if (typeof $window.fbq !== 'undefined') {
                     this._log('facebook pixel already initialized');
                     return;
                 }
@@ -245,10 +245,10 @@ angular.module('umc-angular-google-analytics', [])
                         t.src = v;
                         s = b.getElementsByTagName(e)[0];
                         s.parentNode.insertBefore(t, s);
-                        $window.pixel = f;
+                        $window.pixel = n;
                     }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'));
 
-                    $window.pixel.fbq('init', pixelCode);
+                    $window.fbq('init', pixelCode);
                 })();
 
                 this._trackPixelPage();
@@ -270,14 +270,14 @@ angular.module('umc-angular-google-analytics', [])
              * @private
              */
             this._trackPixel = function(action, data) {
-                if (angular.isUndefined($window.pixel)) {
+                if (angular.isUndefined($window.fbq)) {
                     return;
                 }
 
                 if (angular.isUndefined(data)) {
-                    $window.pixel.fbq('track', action);
+                    $window.fbq('track', action);
                 } else {
-                    $window.pixel.fbq('track', action, data);
+                    $window.fbq('track', action, data);
                 }
 
                 this._log('pixel-' + action, data);

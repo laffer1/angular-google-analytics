@@ -1,7 +1,7 @@
 {
   "name": "umc-angular-google-analytics",
   "description": "Easy Google Analytics for your AngularJS application",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "license": "MIT",
   "homepage": "https://github.com/laffer1/angular-google-analytics",
   "author": [

@@ -1,3 +1,8 @@
+<a name="0.3.3"></a>
+## [0.3.3](https://github.com/laffer1/angular-google-analytics/compare/0.3.2...v0.3.3) (2017-03-29)
+
+Fix a bug where facebook pixel id was not set.
+
 <a name="0.3.2"></a>
 ## [0.3.2](https://github.com/laffer1/angular-google-analytics/compare/0.3.1...v0.3.2) (2017-03-16)
 
